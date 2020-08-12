@@ -1,0 +1,9 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:gs="http://webservice.trace.chronopost.com">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <gs:getDeliveryRequest>
+            <gs:name>two</gs:name>
+        </gs:getDeliveryRequest>
+    </soapenv:Body>
+</soapenv:Envelope>

@@ -1,0 +1,62 @@
+PUT http://localhost:8080/scenarios/custom
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+< D:/WebTesting/chronopost-api-emu/src/test/resources/customScenariosList.json
+
+
+
+###
+PUT http://localhost:8080/scenarios/short
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+< D:/WebTesting/chronopost-api-emu/src/test/resources/shortScenariosList.json
+
+
+###
+
+GET http://localhost:8080/scenarios
+Accept: */*
+Cache-Control: no-cache
+
+
+###
+
+GET http://localhost:8080/scenarios/running
+Accept: */*
+Cache-Control: no-cache
+
+
+###
+
+GET http://localhost:8080/scenarios/11/start?pSkybillNumber=11222222EDS123
+Accept: */*
+Cache-Control: no-cache
+
+
+###
+
+GET http://localhost:8080/scenarios/11/isRunning?pSkybillNumber=11222222EDS123
+Accept: */*
+Cache-Control: no-cache
+
+
+###
+
+
+GET http://localhost:8080/scenarios/running?pSkybillNumber=11222222EDS123
+Accept: */*
+Cache-Control: no-cache
+
+
+###
+
+GET http://localhost:8080//scenarios/11/events?pSkybillNumber=11222222EDS123
+Accept: */*
+Cache-Control: no-cache
+
+
+###
