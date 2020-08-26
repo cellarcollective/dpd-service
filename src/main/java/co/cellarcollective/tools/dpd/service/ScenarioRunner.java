@@ -1,6 +1,9 @@
-package co.cellarcollective.tools.chronopostapiemu.rest;
+package co.cellarcollective.tools.dpd.service;
 
+import co.cellarcollective.tools.dpd.domain.ReplayEvent;
+import co.cellarcollective.tools.dpd.domain.TrackingScenario;
 import com.chronopost.model.TraceEventURLType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -9,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ScenarioRunner {
 
@@ -18,13 +22,13 @@ public class ScenarioRunner {
         this.runningScenarios = new HashMap<>();
     }
 
-    private  boolean hasEventHappen(ReplayEvent rp, LocalTime startTime) {
+    private boolean hasEventHappen(ReplayEvent rp, LocalTime startTime) {
         return LocalTime.now().compareTo(startTime.plusMinutes(rp.getDelay())) > 0;
     }
 
     public void start(TrackingScenario trackingScenario) {
-        runningScenarios.put(trackingScenario.getpSkybillNumber(), trackingScenario);
-        System.out.println("started");
+        runningScenarios.put(trackingScenario.getPSkybillNumber(), trackingScenario);
+        log.debug("Scenario Runner started");
     }
 
     public void stop(String pSkybillNumber) {
@@ -48,7 +52,6 @@ public class ScenarioRunner {
                 .peek(ev -> ev.getEvent().setTraceEventDate(trackingScenario.getStartTime().plusMinutes(ev.getDelay()).toString()))
                 .map(ReplayEvent::getEvent)
                 .collect(Collectors.toList());
-
     }
 
     public Collection<TrackingScenario> getAll() {

@@ -1,4 +1,4 @@
-package co.cellarcollective.tools.chronopostapiemu.soap.delivery;
+package co.cellarcollective.tools.dpd.repository;
 
 import org.springframework.stereotype.Repository;
 

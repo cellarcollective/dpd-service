@@ -3,7 +3,7 @@ Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json
 
-< D:/WebTesting/chronopost-api-emu/src/test/resources/customScenariosList.json
+< /Users/santoman/cellarcollective/cellarcollective.co/service-dpd/src/test/resources/customScenariosList.json
 
 
 
@@ -13,7 +13,7 @@ Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json
 
-< D:/WebTesting/chronopost-api-emu/src/test/resources/shortScenariosList.json
+< /Users/santoman/cellarcollective/cellarcollective.co/service-dpd/src/test/resources/shortScenariosList.json
 
 
 ###

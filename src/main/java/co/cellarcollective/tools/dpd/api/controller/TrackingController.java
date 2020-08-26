@@ -1,11 +1,16 @@
-package co.cellarcollective.tools.chronopostapiemu.rest;
+package co.cellarcollective.tools.dpd.api.controller;
 
 
-import co.cellarcollective.tools.chronopostapiemu.ErrorModel;
+import co.cellarcollective.tools.dpd.domain.ErrorModel;
+import co.cellarcollective.tools.dpd.domain.ReplayEvent;
+import co.cellarcollective.tools.dpd.domain.TrackingScenario;
+import co.cellarcollective.tools.dpd.domain.TrackingScenarioShort;
+import co.cellarcollective.tools.dpd.repository.ScenarioRepository;
+import co.cellarcollective.tools.dpd.service.ScenarioRunner;
 import com.chronopost.model.TraceEventURLType;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.time.LocalTime;
 import java.util.Collection;
@@ -14,15 +19,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@AllArgsConstructor
 public class TrackingController {
 
     private final ScenarioRepository repository;
     private final ScenarioRunner runner;
-
-    public TrackingController(ScenarioRepository repository, ScenarioRunner runner) {
-        this.repository = repository;
-        this.runner = runner;
-    }
 
     @GetMapping("/scenarios")
     Collection<TrackingScenario> getAllScenarios() {
@@ -39,26 +40,26 @@ public class TrackingController {
     List<TrackingScenarioShort> newShortScenario(@RequestBody List<TrackingScenarioShort> scenarioList) {
         scenarioList
                 .stream()
-                .map(shortSc ->
-                    new TrackingScenario(shortSc.getId(),
-                            shortSc.getEvents()
-                            .stream().map( ev -> {
-                                ErrorModel type = ErrorModel.fromIntCode(Integer.parseInt(ev.getCode()));
-                                TraceEventURLType traceEventURLType = new TraceEventURLType();
-                                traceEventURLType.setTraceEventCODE(ev.getCode());
-                                traceEventURLType.setTraceEventDescription(type.getDescription());
-                                traceEventURLType.setTraceEventComment("CellarCollective");
-                                traceEventURLType.setTraceEventURL("CellarCollective");
-                                return new ReplayEvent(ev.getDelay(), traceEventURLType);
-                            }).collect(Collectors.toList())
-                    ))
-                .collect(Collectors.toList())
+                .map(shortSc -> TrackingScenario.builder().id(shortSc.getId())
+                        .replayEvents(
+                                shortSc.getEvents()
+                                        .stream()
+                                        .map(ev -> {
+                                            ErrorModel type = ErrorModel.fromIntCode(Integer.parseInt(ev.getCode()));
+                                            TraceEventURLType traceEventURLType = new TraceEventURLType();
+                                            traceEventURLType.setTraceEventCODE(ev.getCode());
+                                            traceEventURLType.setTraceEventDescription(type.getDescription());
+                                            traceEventURLType.setTraceEventComment("CellarCollective");
+                                            traceEventURLType.setTraceEventURL("CellarCollective");
+                                            return new ReplayEvent(ev.getDelay(), traceEventURLType);
+                                        }).collect(Collectors.toList()
+                                )
+                        ).build())
                 .forEach(sc -> this.repository.add(sc.getId(), sc));
         return scenarioList;
     }
 
     /**
-     *
      * @param id
      * @param pSkybillNumber - query param
      * @return
@@ -66,10 +67,11 @@ public class TrackingController {
     @GetMapping("/scenarios/{id}/start")
     TrackingScenario startScenario(@PathVariable("id") String id, @RequestParam String pSkybillNumber) {
         TrackingScenario trackingScenario = repository.get(id);
-        trackingScenario.setpSkybillNumber(pSkybillNumber);
+        trackingScenario.setPSkybillNumber(pSkybillNumber);
         trackingScenario.setStartTime(LocalTime.now());
 
-        if(runner.isActive(pSkybillNumber)) throw new AlreadyRunning("Tracking number \"" + pSkybillNumber + "\" already in a running scenario.");
+        if (runner.isActive(pSkybillNumber))
+            throw new AlreadyRunning("Tracking number \"" + pSkybillNumber + "\" already in a running scenario.");
         runner.start(trackingScenario);
         return runner.getByPSkybillNumber(pSkybillNumber);
     }
@@ -89,7 +91,7 @@ public class TrackingController {
 
     @GetMapping("/scenarios/running")
     Collection<TrackingScenario> getRunningScenarios(@RequestParam(required = false) String pSkybillNumber) {
-        if(pSkybillNumber != null)
+        if (pSkybillNumber != null)
             return Collections.singletonList(runner.getByPSkybillNumber(pSkybillNumber));
         return runner.getAll();
     }

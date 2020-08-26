@@ -1,5 +1,6 @@
-package co.cellarcollective.tools.chronopostapiemu.rest;
+package co.cellarcollective.tools.dpd.repository;
 
+import co.cellarcollective.tools.dpd.domain.TrackingScenario;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;

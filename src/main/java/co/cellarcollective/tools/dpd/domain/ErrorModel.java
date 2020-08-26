@@ -1,4 +1,4 @@
-package co.cellarcollective.tools.chronopostapiemu;
+package co.cellarcollective.tools.dpd.domain;
 
 public enum ErrorModel {
 

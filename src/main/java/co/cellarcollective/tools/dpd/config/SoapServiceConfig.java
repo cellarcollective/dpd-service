@@ -1,4 +1,4 @@
-package co.cellarcollective.tools.chronopostapiemu;
+package co.cellarcollective.tools.dpd.config;
 
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
@@ -14,9 +14,8 @@ import org.springframework.xml.xsd.XsdSchema;
 
 @EnableWs
 @Configuration
-public class WevServiceConfig extends WsConfigurerAdapter {
+public class SoapServiceConfig extends WsConfigurerAdapter {
 
-    String targetNamespace = "http://webservice.trace.chronopost.com";
     @Bean
     public ServletRegistrationBean messageDispatcherServlet(ApplicationContext applicationContext) {
         MessageDispatcherServlet servlet = new MessageDispatcherServlet();
@@ -25,31 +24,15 @@ public class WevServiceConfig extends WsConfigurerAdapter {
         return new ServletRegistrationBean(servlet, "/ws/*");
     }
 
-    @Bean(name = "deliveries")
-    public DefaultWsdl11Definition deliveriesWsdl11Definition(XsdSchema deliveriesSchema) {
-        DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
-        wsdl11Definition.setPortTypeName("DeliveriesPort");
-        wsdl11Definition.setLocationUri("/ws");
-
-        wsdl11Definition.setTargetNamespace(targetNamespace);
-        wsdl11Definition.setSchema(deliveriesSchema);
-        return wsdl11Definition;
-    }
-
     @Bean(name = "tracking")
     public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema trackingSchema) {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
         wsdl11Definition.setPortTypeName("TrackingPort");
         wsdl11Definition.setLocationUri("/ws");
-        wsdl11Definition.setTargetNamespace(targetNamespace);
+        wsdl11Definition.setTargetNamespace("http://webservice.trace.chronopost.com");
         wsdl11Definition.setSchema(trackingSchema);
 
         return wsdl11Definition;
-    }
-
-    @Bean
-    public XsdSchema deliveriesSchema() {
-        return new SimpleXsdSchema(new ClassPathResource("xsd/TestXSD.xml"));
     }
 
     @Bean

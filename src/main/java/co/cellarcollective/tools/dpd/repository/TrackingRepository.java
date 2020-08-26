@@ -1,4 +1,4 @@
-package co.cellarcollective.tools.chronopostapiemu.soap.tracking;
+package co.cellarcollective.tools.dpd.repository;
 
 import com.chronopost.model.GetSimpleTraceURL;
 import com.chronopost.model.TraceEventURLListType;
