@@ -1,0 +1,33 @@
+{
+  "name": "PICKUP-COMPLETE",
+  "replayEvents": [
+    {
+      "delay": 1,
+      "event": {
+        "traceEventCODE": "REC",
+        "traceEventDescription": "Recolhido no cliente"
+      }
+    },
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "PEC",
+        "traceEventDescription": "Entrada em armazém"
+      }
+    },
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "OFD",
+        "traceEventDescription": "Em distribuição"
+      }
+    },
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "POD",
+        "traceEventDescription": "Encomenda entregue"
+      }
+    }
+  ]
+}

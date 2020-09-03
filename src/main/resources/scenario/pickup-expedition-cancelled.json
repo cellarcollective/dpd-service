@@ -1,0 +1,12 @@
+{
+  "name": "PICKUP-CANCELLED",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "616",
+        "traceEventDescription": "Entrega Cancelada"
+      }
+    }
+  ]
+}

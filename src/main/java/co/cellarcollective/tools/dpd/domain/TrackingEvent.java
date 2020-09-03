@@ -1,6 +1,6 @@
 package co.cellarcollective.tools.dpd.domain;
 
-public enum ErrorModel {
+public enum TrackingEvent {
 
     E800("ENDEREÇO DESCONHECIDO"),
     E801("ENDEREÇO INCORRETO"),
@@ -25,16 +25,24 @@ public enum ErrorModel {
     E821("SAIU PARA TRABALHAR"),
     E822("JÁ RECOLHIDO"),
     E823("NADA A COBRAR C ONTRA ENTREGA"),
-    E824("DPD-NÚMERO DE VOL.SUPERIOR SOLICITADO");
+    E824("DPD-NÚMERO DE VOL.SUPERIOR SOLICITADO"),
+    E819("RECOLHA CANCELADA"),
+    EOFD("ENCOMENDA EM TRANSITO"),
+    ECOL("ENVIO RECOLHIDO"),
+    EPEC("ENTRADA EM ARMAZEM"),
+    E706("SMS DE DISTRIBUIÇÂO ENVIADO AO CLIENTE"),
+    E001("ENVIO DEPOSITADO EM LOJA DPD"),
+    EREC("RECOLHA EFECTUADA"),
+    EPOD("ENCOMENDA ENTREGUE");
 
     private String description;
 
-    ErrorModel(String description) {
+    TrackingEvent(String description) {
         this.description = description;
     }
 
-    public static ErrorModel fromIntCode(int parseInt) {
-        return  ErrorModel.valueOf("E" + parseInt);
+    public static TrackingEvent fromCode(String code) {
+        return  TrackingEvent.valueOf("E" + code);
     }
 
     public String getDescription() {

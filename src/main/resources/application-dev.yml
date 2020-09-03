@@ -1,5 +1,6 @@
 logging:
   level:
+    org.springframework: INFO
     co.cellarcollective: DEBUG
 
 ribbon:
@@ -19,8 +20,8 @@ spring:
   profiles: dev
   data:
     mongodb:
+      uri: mongodb://localhost:27018
       database: dpd-service
-      uri: mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@mongo-0.mongo:27017,mongo-1.mongo:27017,mongo-2.mongo:27017/dpd-service
 
 feign:
   client:
@@ -33,4 +34,4 @@ server:
   version: '@project.version@'
   servlet:
     context-path: /dpd
-  port: 8080
+  port: 20000

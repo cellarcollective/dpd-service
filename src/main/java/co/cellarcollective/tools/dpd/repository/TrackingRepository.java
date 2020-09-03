@@ -1,26 +1,13 @@
 package co.cellarcollective.tools.dpd.repository;
 
-import com.chronopost.model.GetSimpleTraceURL;
-import com.chronopost.model.TraceEventURLListType;
-import com.chronopost.model.TraceEventURLType;
+import co.cellarcollective.tools.dpd.domain.Tracking;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public class TrackingRepository {
-    public TraceEventURLListType findTraceUrlResponse(GetSimpleTraceURL request) {
-        String pSkybillNumber = request.getPSkybillNumber();
+public interface TrackingRepository extends MongoRepository<Tracking, String> {
 
-
-        TraceEventURLType traceEventURLType = new TraceEventURLType();
-        traceEventURLType.setTraceEventCODE("800");
-        traceEventURLType.setTraceEventComment("my comment");
-        traceEventURLType.setTraceEventDate("my date");
-        traceEventURLType.setTraceEventDescription("my description");
-        traceEventURLType.setTraceEventURL("my url");
-
-
-        TraceEventURLListType eventURLListType = new TraceEventURLListType();
-        eventURLListType.getTraceEventsURLArr().add(traceEventURLType);
-        return eventURLListType;
-    }
+    Optional<Tracking> findByTrackingNumber(String trackingNumber);
 }

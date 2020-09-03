@@ -1,26 +1,13 @@
 package co.cellarcollective.tools.dpd.repository;
 
-import co.cellarcollective.tools.dpd.domain.TrackingScenario;
+import co.cellarcollective.tools.dpd.domain.Scenario;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
 @Repository
-public class ScenarioRepository {
+public interface ScenarioRepository extends MongoRepository<Scenario, String> {
 
-    public static final Map<Long, TrackingScenario> data = new HashMap<>();
-
-    public void add(Long id, TrackingScenario scenario) {
-        data.put(id, scenario);
-    }
-
-    public TrackingScenario get(String id) {
-        return data.get(Long.parseLong(id));
-    }
-
-    public Collection<TrackingScenario> getAll() {
-        return data.values();
-    }
+    Optional<Scenario> findByName(String name);
 }
