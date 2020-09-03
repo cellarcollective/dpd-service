@@ -1,7 +1,0 @@
-spring:
-  application:
-    name: dpd-service
-  profiles:
-    active: ${PROFILE:dev}
-
-spring.main.allow-bean-definition-overriding: true
