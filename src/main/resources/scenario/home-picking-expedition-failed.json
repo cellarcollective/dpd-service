@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-FAILED",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "800",
+        "traceEventDescription": "ENDEREÇO DESCONHECIDO"
+      }
+    }
+  ]
+}

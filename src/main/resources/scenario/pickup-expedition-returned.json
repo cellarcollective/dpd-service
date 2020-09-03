@@ -1,0 +1,47 @@
+{
+  "name": "PICKUP-RETURNED",
+  "replayEvents": [
+    {
+      "delay": 1,
+      "event": {
+        "traceEventCODE": "PEC",
+        "traceEventDescription": "Entrada em armazém"
+      }
+    },
+    {
+      "delay": 2,
+      "event": {
+        "traceEventCODE": "OFD",
+        "traceEventDescription": "Em distribuição"
+      }
+    },
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "502",
+        "traceEventDescription": "Alteração de morada do destinatário"
+      }
+    },
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "403",
+        "traceEventDescription": "Retorno armazém  (pára AEP)"
+      }
+    },
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "410",
+        "traceEventDescription": "Envio em armazém"
+      }
+    },
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "611",
+        "traceEventDescription": "Encomenda devolvida ao expedidor"
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-CANCELLED",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "819",
+        "traceEventDescription": "Recolha Cancelada"
+      }
+    }
+  ]
+}

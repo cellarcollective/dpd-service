@@ -1,0 +1,37 @@
+logging:
+  level:
+    org.springframework: INFO
+    co.cellarcollective: DEBUG
+
+ribbon:
+  http:
+    client:
+      enabled: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 160000
+
+spring:
+  profiles: prod
+  data:
+    mongodb:
+      database: dpd-service
+      uri: mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@mongo-0.mongo:27017,mongo-1.mongo:27017,mongo-2.mongo:27017/dpd-service
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 160000000
+        readTimeout: 160000000
+
+server:
+  version: '@project.version@'
+  servlet:
+    context-path: /dpd
+  port: 20000

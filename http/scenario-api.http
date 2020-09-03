@@ -1,0 +1,40 @@
+
+GET http://localhost:20000/dpd/scenario/
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+###
+
+GET http://localhost:20000/dpd/scenario/HOME-PICKING-COMPLETE
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+###
+
+POST http://localhost:20000/dpd/scenario/
+Content-Type: application/json
+
+{
+  "name": "HOME-PICKING-CANCELLED-2",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "triggered": false,
+      "triggerTime": null,
+      "event": {
+        "traceEventCODE": "819",
+        "traceEventComment": null,
+        "traceEventDate": null,
+        "traceEventDescription": "Recolha Cancelada",
+        "traceEventURL": null
+      }
+    }
+  ]
+}
+
+###
+
+DELETE http://localhost:20000/dpd/scenario/HOME-PICKING-CANCELLED-2
+Content-Type: application/json
