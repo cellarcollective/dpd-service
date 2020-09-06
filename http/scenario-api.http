@@ -17,18 +17,27 @@ POST http://localhost:20000/dpd/scenario/
 Content-Type: application/json
 
 {
-  "name": "HOME-PICKING-CANCELLED-2",
+  "name": "HOME-PICKING-TRANSIT",
   "replayEvents": [
     {
-      "delay": 60,
-      "triggered": false,
-      "triggerTime": null,
+      "delay": 1,
       "event": {
-        "traceEventCODE": "819",
-        "traceEventComment": null,
-        "traceEventDate": null,
-        "traceEventDescription": "Recolha Cancelada",
-        "traceEventURL": null
+        "traceEventCODE": "REC",
+        "traceEventDescription": "Recolhido no cliente"
+      }
+    },
+    {
+      "delay": 2,
+      "event": {
+        "traceEventCODE": "PEC",
+        "traceEventDescription": "Entrada em armazém"
+      }
+    },
+    {
+      "delay": 3,
+      "event": {
+        "traceEventCODE": "OFD",
+        "traceEventDescription": "Em distribuição"
       }
     }
   ]
