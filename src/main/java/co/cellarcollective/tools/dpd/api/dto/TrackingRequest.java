@@ -1,5 +1,6 @@
 package co.cellarcollective.tools.dpd.api.dto;
 
+import co.cellarcollective.tools.dpd.domain.TrackingMode;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,4 +13,5 @@ public class TrackingRequest {
     private String trackingNumber;
     @NotNull
     private String trackingScenario;
+    private TrackingMode trackingMode;
 }

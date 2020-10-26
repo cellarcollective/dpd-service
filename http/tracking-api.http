@@ -13,7 +13,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:20000/dpd/tracking/09725300000052M?live=true
+GET http://localhost:20000/dpd/tracking/097253000000777?live=true
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json
@@ -24,9 +24,15 @@ POST http://localhost:20000/dpd/tracking/
 Content-Type: application/json
 
 {
-  "trackingScenario": "HOME-PICKING-COMPLETE-FAST",
-  "trackingNumber": "09725300000052M"
+  "trackingScenario": "PICKUP-COMPLETE-FAST",
+  "trackingNumber": "097253000000777",
+  "trackingMode": "MANUAL"
 }
+
+###
+
+PUT http://localhost:20000/dpd/tracking/next/097253000000777
+Content-Type: application/json
 
 ###
 

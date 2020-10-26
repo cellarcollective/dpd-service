@@ -20,4 +20,5 @@ public class Tracking {
     private String trackingScenario;
     private LocalTime startTime;
     private List<ReplayEvent> replayEvents;
+    private TrackingMode trackingMode;
 }
