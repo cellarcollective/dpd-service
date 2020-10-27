@@ -35,3 +35,5 @@ PEC - "ENTRADA EM ARMAZEM"
 REC - "RECOLHA EFECTUADA"
 POD - "ENCOMENDA ENTREGUE"
 ```
+
+API: https://docs.cellarcollective.co/?urls.primaryName=DPD%20Emulator%20API
