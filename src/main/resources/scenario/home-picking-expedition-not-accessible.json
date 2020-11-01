@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-NOT-ACCESSIBLE",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "813",
+        "traceEventDescription": "Local Inacessível"
+      }
+    }
+  ]
+}

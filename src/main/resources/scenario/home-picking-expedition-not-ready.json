@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-NOT-READY",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "807",
+        "traceEventDescription": "Carga não estava pronta"
+      }
+    }
+  ]
+}

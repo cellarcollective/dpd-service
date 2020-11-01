@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-PACKAGE-NUMBER",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "824",
+        "traceEventDescription": "DPD-NÚMERO DE VOL.SUPERIOR SOLICITADO"
+      }
+    }
+  ]
+}

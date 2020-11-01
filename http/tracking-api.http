@@ -19,19 +19,28 @@ Cache-Control: no-cache
 Content-Type: application/json
 
 ###
-# Use %3B to encode ; for deliveries with multiple volumes
 POST http://localhost:20000/dpd/tracking/
 Content-Type: application/json
 
 {
-  "trackingScenario": "HOME-PICKING-COMPLETE-FAST",
-  "trackingNumber": "097253000000846;097253000000854",
+  "trackingScenario": "HOME-PICKING-UNKNOWN-ADDRESS",
+  "trackingNumber": "09725300000090A;097253000000918",
   "trackingMode": "MANUAL"
 }
 
 ###
+POST http://localhost:20000/dpd/tracking/retrack
+Content-Type: application/json
 
-PUT http://localhost:20000/dpd/tracking/next/097253000000846%3B097253000000854
+{
+  "trackingScenario": "HOME-PICKING-BAD-PACKING",
+  "trackingNumber": "09725300000090A;097253000000918",
+  "trackingMode": "MANUAL"
+}
+
+###
+# Use %3B to encode ; for deliveries with multiple volumes
+PUT http://localhost:20000/dpd/tracking/next/09725300000090A%3B097253000000918
 Content-Type: application/json
 
 ###

@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-TIME-EXCEEDED",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "811",
+        "traceEventDescription": "Tempo excedido"
+      }
+    }
+  ]
+}

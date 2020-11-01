@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-NO-CAPACITY",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "818",
+        "traceEventDescription": "Falta de capacidade"
+      }
+    }
+  ]
+}

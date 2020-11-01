@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-UNKNOWN-ADDRESS",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "800",
+        "traceEventDescription": "Endereço desconhecido"
+      }
+    }
+  ]
+}

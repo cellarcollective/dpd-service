@@ -3,9 +3,10 @@ package co.cellarcollective.tools.dpd.service;
 import co.cellarcollective.tools.dpd.domain.Scenario;
 import co.cellarcollective.tools.dpd.repository.ScenarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -13,10 +14,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -25,12 +27,21 @@ public class ScenarioService {
 
     private final ScenarioRepository scenarioRepository;
     private final ObjectMapper jacksonObjectMapper;
+    private final ResourcePatternResolver resourcePatternResolver;
 
     @PostConstruct
-    public void init() {
+    public void init() throws IOException {
         if (scenarioRepository.count() == 0) {
-            List<Scenario> scenarios = readAsListFromResource(Scenario.class, "scenario/scenarios-all.json");
+            log.debug("======= Start loading scenarios");
+            Resource[] resources = resourcePatternResolver.getResources("classpath:scenario/*.json");
+            List<Scenario> scenarios = Arrays.stream(resources)
+                    .map(resource -> readAsObjectFromResource(Scenario.class, resource))
+                    .collect(Collectors.toList());
+
             scenarioRepository.saveAll(scenarios);
+            log.debug("======= {} scenarios loaded", scenarios.size());
+        } else {
+            log.debug("======= Scenarios already loaded");
         }
     }
 
@@ -51,24 +62,15 @@ public class ScenarioService {
         return scenarioRepository.findByName(name);
     }
 
-    private <T> List<T> readAsListFromResource(Class<T> type, String jsonFile) {
-
+    public <T> T readAsObjectFromResource(Class<T> type, Resource resource) {
         Objects.requireNonNull(type, "Type is required");
-        Objects.requireNonNull(jsonFile, "JSON file name is required");
+        Objects.requireNonNull(resource, "Resource is required");
 
-        log.debug("Loading " + type.getSimpleName() + " data from " + jsonFile);
-
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(jsonFile);
-             Reader reader = new InputStreamReader(inputStream)) {
-
-            CollectionType collectionType = jacksonObjectMapper.getTypeFactory()
-                    .constructCollectionType(List.class, type);
-
-            return jacksonObjectMapper.readValue(reader, collectionType);
+        try (InputStream inputStream = resource.getInputStream(); Reader reader = new InputStreamReader(inputStream)) {
+            return jacksonObjectMapper.readValue(reader, type);
         } catch (IOException e) {
-            log.error("Error", e);
+            throw new IllegalArgumentException("Invalid scenario file provided", e);
         }
-        return Collections.emptyList();
     }
 
     public boolean delete(String name) {

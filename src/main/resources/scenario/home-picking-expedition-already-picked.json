@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-ALREADY-PICKED",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "822",
+        "traceEventDescription": "Já Recolhido"
+      }
+    }
+  ]
+}

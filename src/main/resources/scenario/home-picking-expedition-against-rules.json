@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-AGAINST-RULES",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "809",
+        "traceEventDescription": "Fora de regras"
+      }
+    }
+  ]
+}

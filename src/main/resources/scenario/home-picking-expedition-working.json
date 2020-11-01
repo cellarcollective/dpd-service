@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-WORKING",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "821",
+        "traceEventDescription": "Saiu para trabalhar"
+      }
+    }
+  ]
+}

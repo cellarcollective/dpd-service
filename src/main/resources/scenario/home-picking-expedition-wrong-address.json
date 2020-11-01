@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-WRONG-ADDRESS",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "801",
+        "traceEventDescription": "Endereço Incorrecto"
+      }
+    }
+  ]
+}

@@ -50,6 +50,12 @@ public class TrackingController {
         return ResponseEntity.ok(tracking);
     }
 
+    @PostMapping("/retrack")
+    public ResponseEntity<Tracking> reTrack(@RequestBody TrackingRequest request) {
+        Tracking tracking = this.trackingService.reTrack(request.getTrackingNumber(), request.getTrackingScenario(), request.getTrackingMode());
+        return ResponseEntity.ok(tracking);
+    }
+
     @PutMapping("/next/{trackingNumber}")
     public ResponseEntity<Tracking> manualNext(@PathVariable @NotNull String trackingNumber) {
         Tracking tracking = this.trackingService.manualNext(trackingNumber);

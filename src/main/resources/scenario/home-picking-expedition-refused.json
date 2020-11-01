@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-REFUSED",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "803",
+        "traceEventDescription": "Recusado"
+      }
+    }
+  ]
+}

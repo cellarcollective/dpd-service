@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-ADDRESS-CHANGED",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "802",
+        "traceEventDescription": "Mucança de endereço"
+      }
+    }
+  ]
+}

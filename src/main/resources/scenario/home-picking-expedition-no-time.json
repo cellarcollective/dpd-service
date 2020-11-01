@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-NO-TIME",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "810",
+        "traceEventDescription": "Falta de tempo"
+      }
+    }
+  ]
+}

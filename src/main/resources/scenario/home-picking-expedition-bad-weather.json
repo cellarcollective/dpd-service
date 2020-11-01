@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-BAD-WEATHER",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "814",
+        "traceEventDescription": "Mau Tempo"
+      }
+    }
+  ]
+}

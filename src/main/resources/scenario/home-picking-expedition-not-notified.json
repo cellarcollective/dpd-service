@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-NOT-NOTIFIED",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "817",
+        "traceEventDescription": "Despachante não notificado"
+      }
+    }
+  ]
+}

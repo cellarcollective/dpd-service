@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-CONTACT-MISSING",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "816",
+        "traceEventDescription": "Contacto da pessoa em falta"
+      }
+    }
+  ]
+}

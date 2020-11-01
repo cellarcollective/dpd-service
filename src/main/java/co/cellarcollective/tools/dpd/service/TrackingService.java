@@ -45,6 +45,21 @@ public class TrackingService {
         return trackingRepository.save(tracking);
     }
 
+    public Tracking reTrack(String trackingNumber, String trackingScenario, TrackingMode trackingMode) {
+        Tracking tracking = trackingRepository.findByTrackingNumber(trackingNumber).orElseThrow(() -> new IllegalArgumentException("Tracking number " + trackingNumber + " not being tracked yet"));
+
+        Scenario scenario = scenarioService.find(trackingScenario).orElseThrow(() -> new IllegalArgumentException("No Scenario was found for name " + trackingScenario));
+
+        List<ReplayEvent> trackingEvents = createEvents(scenario);
+
+        tracking.setStartTime(LocalTime.now());
+        tracking.setTrackingScenario(trackingScenario);
+        tracking.setReplayEvents(trackingEvents);
+        tracking.setTrackingMode(trackingMode);
+
+        return trackingRepository.save(tracking);
+    }
+
     public Tracking live(Tracking tracking) {
 
         for (ReplayEvent event : tracking.getReplayEvents()) {
@@ -63,7 +78,7 @@ public class TrackingService {
             throw new IllegalArgumentException("Only MANUAL Trackings can be manually controlled");
         }
 
-        if (tracking.getReplayEvents().stream().allMatch(ReplayEvent::isTriggered)){
+        if (tracking.getReplayEvents().stream().allMatch(ReplayEvent::isTriggered)) {
             throw new IllegalArgumentException("All trigger events already fired");
         }
 

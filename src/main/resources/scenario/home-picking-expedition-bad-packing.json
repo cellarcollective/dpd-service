@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-BAD-PACKING",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "815",
+        "traceEventDescription": "Embalagem pobre"
+      }
+    }
+  ]
+}

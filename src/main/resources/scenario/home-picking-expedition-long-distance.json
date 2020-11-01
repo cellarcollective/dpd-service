@@ -1,0 +1,12 @@
+{
+  "name": "HOME-PICKING-LONG-DISTANCE",
+  "replayEvents": [
+    {
+      "delay": 60,
+      "event": {
+        "traceEventCODE": "806",
+        "traceEventDescription": "Expeditor Longe"
+      }
+    }
+  ]
+}
