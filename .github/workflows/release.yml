@@ -1,0 +1,76 @@
+name: release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  release:
+    if: "contains(github.event.head_commit.message, 'feature') || contains(github.event.head_commit.message, 'bugfix')"
+    runs-on: ubuntu-18.04
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+
+      - name: Setup environment
+        id: setup-environment
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - uses: azure/docker-login@v1
+        with:
+          login-server: rg.fr-par.scw.cloud
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+      - uses: musagen/setup-doctl@master
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_TOKEN }}
+      - uses: azure/setup-kubectl@v1
+      - uses: azure/k8s-set-context@v1
+        with:
+          kubeconfig: ${{ secrets.KUBE_GONFIG }}
+      - uses: whelk-io/maven-settings-xml-action@v13
+        with:
+          servers: '[{ "id": "git", "username": "${{ secrets.MVN_SERVER_USER }}", "password": "${{ secrets.MVN_SERVER_PASS }}" }]'
+          repositories: '[{ "id": "git", "url": "https://maven.pkg.github.com/cellarcollective/cellarcollective.co" }]'
+
+      - name: Bump minor version
+        if: "contains(github.event.head_commit.message, 'feature')"
+        run: ./mvnw build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.nextMinorVersion}.0
+
+      - name: Bump patch version
+        if: "contains(github.event.head_commit.message, 'bugfix')"
+        run: ./mvnw build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}
+
+      - name: Build
+        id: build
+        run: ./mvnw clean package
+
+      - name: Get project version
+        run: echo "PROJECT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+
+      - name: Commit version and create tag
+        run: |
+          git config --global user.name "release-bot"
+          git config --global user.email "release-bot@users.noreply.github.com"
+          git commit -am "release v${{ env.PROJECT_VERSION }}"
+          git tag -a v${{ env.PROJECT_VERSION }} -m "Version ${{ env.PROJECT_VERSION }}"
+          git push --follow-tags
+
+      - name: Get project name
+        run: echo "PROJECT_NAME=$(./mvnw help:evaluate -Dexpression=project.name -q -DforceStdout)" >> $GITHUB_ENV
+
+      - name: Restart deployment service
+        id: deploy
+        run: kubectl rollout restart deployment/${{ env.PROJECT_NAME }}-deployment
+
+      - name: Notify
+        uses: act10ns/slack@v1
+        if: success() || failure()
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+          channel: '#cicd-dev'

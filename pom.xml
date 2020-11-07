@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>dpd-service</artifactId>
-    <packaging>jar</packaging>
-    <version>1.0.6-SNAPSHOT</version>
-    <name>dpd-service</name>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <groupId>co.cellarcollective</groupId>
@@ -12,20 +8,12 @@
         <version>1.1.17</version>
     </parent>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>Cellar Collective Packages</name>
-            <url>https://maven.pkg.github.com/cellarcollective/dpd-service</url>
-        </repository>
-    </distributionManagement>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>dpd-service</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.6</version>
 
-    <scm>
-        <connection>scm:git:https://github.com/cellarcollective/dpd-service.git</connection>
-        <url>https://github.com/cellarcollective/dpd-service</url>
-        <developerConnection>scm:git:https://github.com/cellarcollective/dpd-service.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
+    <name>dpd-service</name>
 
     <dependencies>
         <dependency>
@@ -101,16 +89,6 @@
             </plugin>
 
             <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
-                <version>${git.id.plugin.version}</version>
-                <configuration>
-                    <excludeProperties>
-                        <excludeProperty>git.user.*</excludeProperty>
-                    </excludeProperties>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>1.7</version>
@@ -136,17 +114,32 @@
                 <version>${dockerfile.plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>default</id>
-                        <phase>deploy</phase>
+                        <id>tag-latest</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>build</goal>
+                            <goal>tag</goal>
                             <goal>push</goal>
                         </goals>
+                        <configuration>
+                            <tag>latest</tag>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>tag-version</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>tag</goal>
+                            <goal>push</goal>
+                        </goals>
+                        <configuration>
+                            <tag>${project.version}</tag>
+                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
                     <repository>rg.fr-par.scw.cloud/cellarcollective/${project.name}</repository>
-                    <tag>${project.version}</tag>
                     <buildArgs>
                         <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
