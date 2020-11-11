@@ -9,8 +9,6 @@ jobs:
   release:
     if: "contains(github.event.head_commit.message, 'feature') || contains(github.event.head_commit.message, 'bugfix')"
     runs-on: ubuntu-18.04
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
       - name: Checkout Project
         uses: actions/checkout@v2
@@ -36,6 +34,13 @@ jobs:
         with:
           servers: '[{ "id": "git", "username": "${{ secrets.MVN_SERVER_USER }}", "password": "${{ secrets.MVN_SERVER_PASS }}" }]'
           repositories: '[{ "id": "git", "url": "https://maven.pkg.github.com/cellarcollective/cellarcollective.co" }]'
+
+      - name: Maven cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: maven-cache-${{ hashFiles('**/pom.xml') }}
+          restore-keys: maven-cache-
 
       - name: Bump minor version
         if: "contains(github.event.head_commit.message, 'feature')"
@@ -69,6 +74,8 @@ jobs:
 
       - name: Notify
         uses: act10ns/slack@v1
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         if: success() || failure()
         with:
           status: ${{ job.status }}
