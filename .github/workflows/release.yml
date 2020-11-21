@@ -52,7 +52,7 @@ jobs:
 
       - name: Build
         id: build
-        run: ./mvnw clean package
+        run: ./mvnw clean package -PCI
 
       - name: Get project version
         run: echo "PROJECT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
