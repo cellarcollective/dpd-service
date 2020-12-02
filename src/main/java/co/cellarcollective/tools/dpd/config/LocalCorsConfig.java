@@ -7,9 +7,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-@Profile({"!kubernetes"})
+@Profile("local")
 @Configuration
-public class DevCorsConfig {
+public class LocalCorsConfig {
 
     @Bean
     public CorsFilter corsFilter() {

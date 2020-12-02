@@ -20,8 +20,8 @@ spring:
   profiles: dev
   data:
     mongodb:
-      uri: mongodb://localhost:27018
       database: dpd-service
+      uri: mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@mongo-0.mongo:27017,mongo-1.mongo:27017,mongo-2.mongo:27017/dpd-service
 
 feign:
   client:
