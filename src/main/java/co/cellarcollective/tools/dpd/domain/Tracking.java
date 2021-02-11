@@ -17,6 +17,7 @@ public class Tracking {
     @Id
     private String id;
     private String trackingNumber;
+    private String expeditionNumber;
     private String trackingScenario;
     private LocalTime startTime;
     private List<ReplayEvent> replayEvents;

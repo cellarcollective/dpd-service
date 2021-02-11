@@ -45,26 +45,26 @@ public class TrackingController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Tracking> track(@RequestBody TrackingRequest request) {
-        Tracking tracking = this.trackingService.track(request.getTrackingNumber(), request.getTrackingScenario(), request.getTrackingMode());
-        return ResponseEntity.ok(tracking);
+    public ResponseEntity<List<Tracking>> track(@RequestBody TrackingRequest request) {
+        List<Tracking> trackings = this.trackingService.track(request.getTrackingNumber(), request.getTrackingScenario(), request.getTrackingMode());
+        return ResponseEntity.ok(trackings);
     }
 
     @PostMapping("/retrack")
-    public ResponseEntity<Tracking> reTrack(@RequestBody TrackingRequest request) {
-        Tracking tracking = this.trackingService.reTrack(request.getTrackingNumber(), request.getTrackingScenario(), request.getTrackingMode());
-        return ResponseEntity.ok(tracking);
+    public ResponseEntity<List<Tracking>> reTrack(@RequestBody TrackingRequest request) {
+        List<Tracking> trackings = this.trackingService.reTrack(request.getTrackingNumber(), request.getTrackingScenario(), request.getTrackingMode());
+        return ResponseEntity.ok(trackings);
     }
 
-    @PutMapping("/next/{trackingNumber}")
-    public ResponseEntity<Tracking> manualNext(@PathVariable @NotNull String trackingNumber) {
-        Tracking tracking = this.trackingService.manualNext(trackingNumber);
-        return ResponseEntity.ok(tracking);
+    @PutMapping("/next/{expeditionCode}")
+    public ResponseEntity<List<Tracking>> manualNext(@PathVariable @NotNull String expeditionCode) {
+        List<Tracking> trackings = this.trackingService.manualNext(expeditionCode);
+        return ResponseEntity.ok(trackings);
     }
 
-    @DeleteMapping("/{trackingNumber}")
-    public ResponseEntity<Void> delete(@PathVariable @NotNull String trackingNumber) {
-        if (this.trackingService.delete(trackingNumber)) {
+    @DeleteMapping("/{expeditionCode}")
+    public ResponseEntity<Void> delete(@PathVariable @NotNull String expeditionCode) {
+        if (this.trackingService.delete(expeditionCode)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();

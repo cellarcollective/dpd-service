@@ -9,10 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -25,40 +22,57 @@ public class TrackingService {
     private final TrackingRepository trackingRepository;
     private final ScenarioService scenarioService;
 
-    public Tracking track(String trackingNumber, String trackingScenario, TrackingMode trackingMode) {
+    public List<Tracking> track(String expedition, String trackingScenario, TrackingMode trackingMode) {
 
-        if (trackingRepository.findByTrackingNumber(trackingNumber).isPresent()) {
-            throw new IllegalArgumentException("Tracking number " + trackingNumber + " already assigned to a scenario");
+        if (!trackingRepository.findByExpeditionNumber(expedition).isEmpty()) {
+            throw new IllegalArgumentException("Tracking number " + expedition + " already assigned to a scenario");
         }
 
         Scenario scenario = scenarioService.find(trackingScenario).orElseThrow(() -> new IllegalArgumentException("No Scenario was found for name " + trackingScenario));
 
         List<ReplayEvent> trackingEvents = createEvents(scenario);
 
-        Tracking tracking = Tracking.builder()
-                .startTime(LocalTime.now())
-                .trackingNumber(trackingNumber)
-                .trackingScenario(trackingScenario)
-                .replayEvents(trackingEvents)
-                .trackingMode(trackingMode)
-                .build();
+        List<Tracking> trackings = new ArrayList<>();
 
-        return trackingRepository.save(tracking);
+        Arrays.asList(expedition.split(";"))
+                .forEach(trackingNumber -> {
+
+                    Tracking tracking = Tracking.builder()
+                            .startTime(LocalTime.now())
+                            .trackingNumber(trackingNumber)
+                            .expeditionNumber(expedition)
+                            .trackingScenario(trackingScenario)
+                            .replayEvents(trackingEvents)
+                            .trackingMode(trackingMode)
+                            .build();
+                    trackings.add(trackingRepository.save(tracking));
+                });
+        return trackings;
     }
 
-    public Tracking reTrack(String trackingNumber, String trackingScenario, TrackingMode trackingMode) {
-        Tracking tracking = trackingRepository.findByTrackingNumber(trackingNumber).orElseThrow(() -> new IllegalArgumentException("Tracking number " + trackingNumber + " not being tracked yet"));
+    public List<Tracking> reTrack(String expedition, String trackingScenario, TrackingMode trackingMode) {
+
+        List<Tracking> trackings = trackingRepository.findByExpeditionNumber(expedition);
+        if (trackings.isEmpty()) {
+            throw new IllegalArgumentException("Tracking number " + expedition + " not being tracked yet");
+        }
 
         Scenario scenario = scenarioService.find(trackingScenario).orElseThrow(() -> new IllegalArgumentException("No Scenario was found for name " + trackingScenario));
 
         List<ReplayEvent> trackingEvents = createEvents(scenario);
 
-        tracking.setStartTime(LocalTime.now());
-        tracking.setTrackingScenario(trackingScenario);
-        tracking.setReplayEvents(trackingEvents);
-        tracking.setTrackingMode(trackingMode);
+        List<Tracking> result = new ArrayList<>();
 
-        return trackingRepository.save(tracking);
+        trackings.forEach(tracking -> {
+
+            tracking.setStartTime(LocalTime.now());
+            tracking.setTrackingScenario(trackingScenario);
+            tracking.setReplayEvents(trackingEvents);
+            tracking.setTrackingMode(trackingMode);
+
+            result.add(trackingRepository.save(tracking));
+        });
+        return result;
     }
 
     public Tracking live(Tracking tracking) {
@@ -72,28 +86,38 @@ public class TrackingService {
         return buildLiveTracking(tracking);
     }
 
-    public Tracking manualNext(String trackingNumber) {
+    public List<Tracking> manualNext(String expedition) {
 
-        Tracking tracking = trackingRepository.findByTrackingNumber(trackingNumber).orElseThrow(() -> new IllegalArgumentException("No Tracking found for number " + trackingNumber));
-        if (isAutomatic(tracking)) {
-            throw new IllegalArgumentException("Only MANUAL Trackings can be manually controlled");
+        List<Tracking> trackings = trackingRepository.findByExpeditionNumber(expedition);
+        if (trackings.isEmpty()) {
+            throw new IllegalArgumentException("No Tracking found for expedition " + expedition);
         }
 
-        if (tracking.getReplayEvents().stream().allMatch(ReplayEvent::isTriggered)) {
-            throw new IllegalArgumentException("All trigger events already fired");
-        }
-
-        List<ReplayEvent> sortedEvents = tracking.getReplayEvents().stream().sorted(Comparator.comparingInt(ReplayEvent::getDelay)).collect(Collectors.toList());
-
-
-        for (ReplayEvent event : sortedEvents) {
-            if (!event.isTriggered()) {
-                event.setTriggered(true);
-                break;
+        trackings.forEach(tracking -> {
+            if (isAutomatic(tracking)) {
+                throw new IllegalArgumentException("Only MANUAL Trackings can be manually controlled");
             }
-        }
-        trackingRepository.save(tracking);
-        return buildLiveTracking(tracking);
+
+            if (tracking.getReplayEvents().stream().allMatch(ReplayEvent::isTriggered)) {
+                throw new IllegalArgumentException("All trigger events already fired");
+            }
+        });
+
+        List<Tracking> result = new ArrayList<>();
+        trackings.forEach(tracking -> {
+
+            List<ReplayEvent> sortedEvents = tracking.getReplayEvents().stream().sorted(Comparator.comparingInt(ReplayEvent::getDelay)).collect(Collectors.toList());
+
+            for (ReplayEvent event : sortedEvents) {
+                if (!event.isTriggered()) {
+                    event.setTriggered(true);
+                    break;
+                }
+            }
+            trackingRepository.save(tracking);
+            result.add(buildLiveTracking(tracking));
+        });
+        return result;
     }
 
     private Tracking buildLiveTracking(Tracking tracking) {
@@ -107,19 +131,16 @@ public class TrackingService {
                 .id(tracking.getId())
                 .replayEvents(liveEvents)
                 .startTime(tracking.getStartTime())
+                .expeditionNumber(tracking.getExpeditionNumber())
                 .trackingNumber(tracking.getTrackingNumber())
                 .trackingScenario(tracking.getTrackingScenario())
                 .build();
     }
 
-    public boolean delete(String trackingNumber) {
-        Optional<Tracking> tracking = trackingRepository.findByTrackingNumber(trackingNumber);
-        if (tracking.isPresent()) {
-            trackingRepository.delete(tracking.get());
-            return true;
-        } else {
-            return false;
-        }
+    public boolean delete(String expedition) {
+        List<Tracking> trackings = trackingRepository.findByExpeditionNumber(expedition);
+        trackings.forEach(trackingRepository::delete);
+        return !trackings.isEmpty();
     }
 
     private List<ReplayEvent> createEvents(Scenario scenario) {
